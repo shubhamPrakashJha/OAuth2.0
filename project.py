@@ -96,6 +96,10 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    # 7.0 Store the access token in the session for later use.
+    login_session['access_token'] = credentials.access_token
+    login_session['gplus_id'] = gplus_id
+
 
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
