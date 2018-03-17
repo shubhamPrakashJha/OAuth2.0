@@ -23,7 +23,7 @@ import requests
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -36,7 +36,7 @@ session = DBSession()
 def show_login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits) for i in xrange(32))
     login_session['state'] = state
-    # return "The current session state is %s" %login_session['state']
+    # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
 
 
@@ -54,8 +54,7 @@ def gconnect():
     print code
     try:
         # 3. Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json',
-                                             scope='https://www.googleapis.com/auth/userinfo.profile')
+        oauth_flow = flow_from_clientsecrets('client_secrets.json',scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -65,13 +64,14 @@ def gconnect():
 
     # 4. Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+           % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
-        response.headers['Content_Type'] = 'application/json'
+        response.headers['Content-Type'] = 'application/json'
         return response
 
     # 5. Verify that the access token is used for the intended user.(since we know the access is working but is it right?)
@@ -194,7 +194,8 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
