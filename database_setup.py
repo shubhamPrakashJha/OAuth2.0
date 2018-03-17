@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
 # step 8. create registered user database
 class User(Base):
     __tablename__ = 'user'
