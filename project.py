@@ -120,8 +120,6 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-
-
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -132,6 +130,7 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
 
 # Step 9. User Helper Function
 
@@ -158,8 +157,6 @@ def getUserID(email):
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id=user_id).one()
     return user
-
-
 
 
 # Step 6 Disconnect
@@ -202,7 +199,6 @@ def gdisconnect():
         return response
 
 
-
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
@@ -234,6 +230,7 @@ def showRestaurants():
 # Create a new restaurant
 @app.route('/restaurant/new/', methods=['GET', 'POST'])
 def newRestaurant():
+    # n Step 7. redirect to login page if user is not logged in before editing
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
