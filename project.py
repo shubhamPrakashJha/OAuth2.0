@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for, f
 
 app = Flask(__name__)
 
+# step 8.1 import User table as well
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem
+from database_setup import Base, Restaurant, MenuItem, User
 
 # Step 2.1 Create anti forgery state token
 from flask import session as login_session
