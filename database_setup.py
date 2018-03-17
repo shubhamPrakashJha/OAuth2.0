@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
-class User(base):
+class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -57,6 +57,6 @@ class MenuItem(Base):
         }
 
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 
 Base.metadata.create_all(engine)
