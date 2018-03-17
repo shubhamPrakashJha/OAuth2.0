@@ -39,6 +39,12 @@ def show_login():
     return render_template('login.html', STATE=state)
 
 
+# Step 5.3 gconnect route
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+    '''on server side, create this function to handle the code sent back from the callback method'''
+
+
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
