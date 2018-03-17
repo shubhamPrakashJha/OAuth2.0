@@ -18,6 +18,9 @@ import json
 from flask import make_response
 import requests
 
+# Step 5.2 delclare Client id by refrencing client secrets
+CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+
 # Connect to Database and create database session
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
