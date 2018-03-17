@@ -124,6 +124,14 @@ def gconnect():
     return output
 
 
+# Step 6 Disconnect
+@app.route("/gdisconnect")
+def gdisconnect():
+    '''
+    DISCONNECT - Revoke a current user's token and reset their login_session
+    '''
+
+
 # JSON APIs to view Restaurant Information
 @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
