@@ -33,7 +33,7 @@ session = DBSession()
 # Step 2.2 Create a state token to prevent request forgery.
 # store it in the session for later validation
 @app.route('/login')
-def show_login():
+def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits) for i in xrange(32))
     login_session['state'] = state
     # return "The current session state is %s" % login_session['state']
