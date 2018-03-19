@@ -77,6 +77,14 @@ def fbconnect():
     login_session['email'] = data["email"]
     login_session['facebook_id'] = data["id"]
 
+    # Get user picture
+    url = 'https://graph.facebook.com/v2.12/me/picture?%s&redirect=0&height=200&width=200' % token
+    h = httplib2.Http()
+    h.request(url, 'GET')
+    result = h.request(url, 'GET')[1]
+    data = json.loads(result)
+    login_session['picture'] = data["data"]["url"]
+
 # Step 5.3 gconnect route
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
