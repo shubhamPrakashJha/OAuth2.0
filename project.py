@@ -40,6 +40,10 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+@app.route('/fbconnect', methods=['POST'])
+def fbconnect():
+    '''fbconnect function'''
+
 # Step 5.3 gconnect route
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
