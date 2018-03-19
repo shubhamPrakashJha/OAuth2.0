@@ -48,6 +48,7 @@ def fbconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     access_token = request.data
+    print "access token received %s " % access_token
 
     # Exchange short-lived client token for long-lived server-side token with GET /oauth/
     # access_token?grant_type=fb_exchange_token&client_id={app-id}&client_secret={app-secret}
@@ -60,12 +61,19 @@ def fbconnect():
     result = h.request(url, 'GET')[1]
     # print result
 
-    # use token to get user info from API
-    userinfo_url = 'https://graph.facebook.com/v2.12/me'
-    # strip expire tag from access token
-    token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v2.12/me?access_token=%s&fields=name,id,email' % token
+    # Use token to get user info from API
+    userinfo_url = "https://graph.facebook.com/v2.8/me"
+    '''
+        Due to the formatting for the result from the server token exchange we have to
+        split the token first on commas and select the first index which gives us the key : value
+        for the server access token then we split it on colons to pull out the actual token value
+        and replace the remaining quotes with nothing so that it can be used directly in the graph
+        api calls
+    '''
+    token = result.split(',')[0].split(':')[1].replace('"', '')
+
+    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     # print "url sent for API access:%s" %url
@@ -77,10 +85,12 @@ def fbconnect():
     login_session['email'] = data["email"]
     login_session['facebook_id'] = data["id"]
 
+    # The token must be stored in the login_session in order to properly logout
+    login_session['access_token'] = token
+
     # Get user picture
-    url = 'https://graph.facebook.com/v2.12/me/picture?%s&redirect=0&height=200&width=200' % token
+    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
     h = httplib2.Http()
-    h.request(url, 'GET')
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
     login_session['picture'] = data["data"]["url"]
