@@ -71,6 +71,11 @@ def fbconnect():
     # print "url sent for API access:%s" %url
     # print "API JSON result: %s" % result
 
+    data = json.loads(result)
+    login_session['provider'] = 'facebook'
+    login_session['username'] = data["name"]
+    login_session['email'] = data["email"]
+    login_session['facebook_id'] = data["id"]
 
 # Step 5.3 gconnect route
 @app.route('/gconnect', methods=['POST'])
