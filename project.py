@@ -43,6 +43,12 @@ def showLogin():
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     '''fbconnect function'''
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    access_token = request.data
+
 
 # Step 5.3 gconnect route
 @app.route('/gconnect', methods=['POST'])
