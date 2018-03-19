@@ -55,10 +55,21 @@ def fbconnect():
     app_id = json.loads(open('fb_client_secret.json', 'r').read())['web']['app_id']
     app_secret = json.loads(open('fb_client_secret.json', 'r').read())['web']['app_secret']
     url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-    app_id, app_secret, access_token)
+        app_id, app_secret, access_token)
     h = httplib2.Http()
-    result = h.request(url, 'GET')
+    result = h.request(url, 'GET')[1]
     # print result
+
+    # use token to get user info from API
+    userinfo_url = 'https://graph.facebook.com/v2.12/me'
+    # strip expire tag from access token
+    token = result.split("&")[0]
+
+    url = 'https://graph.facebook.com/v2.12/me?access_token=%s&fields=name,id,email' % token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[1]
+    # print "url sent for API access:%s" %url
+    # print "API JSON result: %s" % result
 
 
 # Step 5.3 gconnect route
